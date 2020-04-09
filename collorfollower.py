@@ -16,27 +16,27 @@ GPIO.setup(40,GPIO.OUT) #ENB
 GPIO.output(29,GPIO.HIGH)
 GPIO.output(40,GPIO.HIGH)
 
-def motorforword():
+def forward():
     GPIO.output(31,GPIO.HIGH)
     GPIO.output(33,GPIO.LOW)
     GPIO.output(35,GPIO.LOW)
     GPIO.output(37,GPIO.HIGH)
-def motorbackword():
+def backward():
     GPIO.output(31,GPIO.LOW)
     GPIO.output(33,GPIO.HIGH)
     GPIO.output(35,GPIO.HIGH)
     GPIO.output(37,GPIO.LOW)
-def motorright():
+def right():
     GPIO.output(31,GPIO.LOW)
     GPIO.output(33,GPIO.LOW)
     GPIO.output(35,GPIO.LOW)
     GPIO.output(37,GPIO.HIGH)
-def motorleft():
+def left():
     GPIO.output(31,GPIO.HIGH)
     GPIO.output(33,GPIO.LOW)
     GPIO.output(35,GPIO.LOW)
     GPIO.output(37,GPIO.LOW)
-def motorstop():
+def stop():
     GPIO.output(31,GPIO.LOW)
     GPIO.output(33,GPIO.LOW)
     GPIO.output(35,GPIO.LOW)
@@ -53,10 +53,10 @@ while True:
     hsv = cv2.cvtColor(blur_frame,cv2.COLOR_BGR2HSV)
     
     #setting the upper and lower values
-    lower_yellow = np.array([0,110,150])
-    upper_yellow = np.array([255, 255, 255])
+    lower_red = np.array([0,50,50]) 
+    upper_red = np.array([10,255,255])
     
-    mask = cv2.inRange(hsv, lower_yellow, upper_yellow)
+    mask = cv2.inRange(hsv, lower_red, upper_red)
     
     #filtering the background noise using Morphological Transformations
     kernel = np.ones((5,5), np.uint8)
@@ -76,28 +76,28 @@ while True:
         area_mContour = w*h
     
         if (area_mContour > 15000) and (area_mContour < 20000):
-            motorstop()
+            stop()
             print('stop')
             sleep(0.01)
         elif area_mContour > 20000:
-            motorbackword()
+            backword()
             print('backward')
         else:
             if center < 220:
-                motorleft()
+                left()
                 print('left')
             elif center > 440:
-                motorright()
+                right()
                 print('right')
             elif center > 220 and center < 440:
-                motorforword()
+                forword()
                 print('straight')
             else :
-                motorstop()
+                stop()
                 print ('stop')
                 sleep(0.01)
     else :
-        motorstop()
+        stop()
         print('stop, no contours is found')
     
     
